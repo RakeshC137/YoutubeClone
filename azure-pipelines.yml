@@ -1,0 +1,46 @@
+name: YouTubeClone-CICD
+
+trigger:
+- main
+
+stages:
+- stage: Build
+  displayName: Build
+  jobs:
+  - job: Build
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: Npm@1
+      inputs:
+        command: 'install'
+        workingDir: '$(Build.ArtifactStagingDirectory)'
+
+    - task: Npm@1
+      inputs: 
+       command: 'custom'
+       customCommand: 'run build'
+    - task: PublishBuildArtifacts@1
+      inputs:
+       PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+       ArtifactName: 'youtube'
+
+- stage: Deploy
+  displayName: DEV_Env
+  jobs:
+  - job: Deployment
+    steps: 
+    - task: DownloadBuildArtifacts@1
+      inputs:
+       buildType: 'current'
+       downloadType: 'single'
+       artifactName: 'youtube'
+       downloadPath: '$(Build.ArtifactStagingDirectory)'
+    - task: AzureRmWebAppDeployment@5
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: 'AzureWebApps'
+        appType: 'webApp'
+        WebAppName: 'ytclone'
+        packageForLinux: '$(Build.ArtifactStagingDirectory)/**/*.zip'
+
