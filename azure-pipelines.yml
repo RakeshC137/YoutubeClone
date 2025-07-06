@@ -14,7 +14,7 @@ stages:
     - task: Npm@1
       inputs:
         command: 'install'
-        workingDir: '$(Build.ArtifactStagingDirectory)'
+        #workingDir: '$(Build.ArtifactStagingDirectory)'
 
     - task: Npm@1
       inputs: 
