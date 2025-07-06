@@ -21,7 +21,7 @@ stages:
        customCommand: 'run build'
     - task: PublishBuildArtifacts@1
       inputs:
-       PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+       PathtoPublish: 'build'
        ArtifactName: 'youtube'
 
 - stage: Deploy
