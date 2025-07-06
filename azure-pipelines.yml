@@ -40,5 +40,5 @@ stages:
         azureSubscription: 'AzureWebApps'
         appType: 'webApp'
         WebAppName: 'ytclone'
-        packageForLinux: '$(Build.ArtifactStagingDirectory)/build/youtube.zip'
+        packageForLinux: '$(Build.ArtifactStagingDirectory)/youtube'
 
