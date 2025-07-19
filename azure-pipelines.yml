@@ -19,7 +19,7 @@ stages:
             customCommand: 'run build'
          - task: PublishBuildArtifacts@1
            inputs:
-             PathtoPublish: '$(Build.ArtifactStagingDirectory)/app.zip'
+             PathtoPublish: '$(Build.ArtifactStagingDirectory)'
              ArtifactName: 'drop'
              publishLocation: Container
 
@@ -36,12 +36,20 @@ stages:
               downloadPath: '$(System.ArtifactStagingDirectory)'
               artifactName: 'drop'
 
+          - task: ArchiveFiles@2
+            inputs:
+              rootFolderOrFile: '$(System.ArtifactStagingDirectory)/drop'
+              includeRootFolder: false
+              archiveType: 'zip'
+              archiveFile: '$(System.ArtifactStagingDirectory)/drop.zip'
+              replaceExistingArchive: true
+
           - task: AzureRmWebAppDeployment@4
             inputs:
              ConnectionType: 'AzureRM'
              azureSubscription: 'AzureWebApps'
              appType: 'webAppLinux'
              WebAppName: 'YoutubeClone2'
-             packageForLinux: '$(System.ArtifactStagingDirectory)/drop/app.zip'
+             packageForLinux: '$(System.ArtifactStagingDirectory)/drop.zip'
              RuntimeStack: 'NODE|20-lts'
              #DeploymentTypeLinux: 'oneDeploy'
