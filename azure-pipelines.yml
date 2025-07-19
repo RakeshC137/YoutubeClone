@@ -19,7 +19,7 @@ stages:
             customCommand: 'run build'
          - task: PublishBuildArtifacts@1
            inputs:
-             PathtoPublish: 'build'
+             PathtoPublish: '$(Build.ArtifactStagingDirectory)/app.zip'
              ArtifactName: 'drop'
              publishLocation: Container
 
@@ -42,6 +42,6 @@ stages:
              azureSubscription: 'AzureWebApps'
              appType: 'webAppLinux'
              WebAppName: 'YoutubeClone2'
-             packageForLinux: '$(System.ArtifactStagingDirectory)/drop'
+             packageForLinux: '$(System.ArtifactStagingDirectory)/drop/app.zip'
              RuntimeStack: 'NODE|20-lts'
              #DeploymentTypeLinux: 'oneDeploy'
