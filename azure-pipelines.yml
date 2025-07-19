@@ -4,41 +4,44 @@ trigger:
 - main
 
 stages:
-- stage: Build
-  displayName: Build
-  jobs:
-  - job: Build
-    pool:
-      vmImage: ubuntu-latest
-    steps:
-    - task: Npm@1
-      inputs:
-        command: 'install'
-    - task: Npm@1
-      inputs: 
-       command: 'custom'
-       customCommand: 'run build'
-    - task: PublishBuildArtifacts@1
-      inputs:
-       PathtoPublish: 'build'
-       ArtifactName: 'youtube'
+  - stage: Build
+    jobs:
+      - job: Build
+        pool: 
+         vmImage: 'ubuntu-latest'
+        steps: 
+         - task: Npm@1
+           inputs:
+             command: install
+         - task: Npm@1
+           inputs:
+            command: custom
+            customCommand: 'run build'
+         - task: PublishBuildArtifacts@1
+           inputs:
+             PathtoPublish: 'build'
+             ArtifactName: 'drop'
+             publishLocation: Container
 
-- stage: Deploy
-  displayName: DEV_Env
-  jobs:
-  - job: Deployment
-    steps: 
-    - task: DownloadBuildArtifacts@1
-      inputs:
-       buildType: 'current'
-       downloadType: 'single'
-       artifactName: 'youtube'
-       downloadPath: '$(Build.ArtifactStagingDirectory)'
-    - task: AzureRmWebAppDeployment@5
-      inputs:
-        ConnectionType: 'AzureRM'
-        azureSubscription: 'AzureWebApps'
-        appType: 'webApp'
-        WebAppName: 'ytclone'
-        packageForLinux: '$(Build.ArtifactStagingDirectory)/youtube'
+  - stage: Deployment
+    jobs:
+      - job: Deployment
+        pool:
+         vmImage: 'ubuntu-latest'
+        steps:
+          - task: DownloadBuildArtifacts@1
+            inputs:
+              downloadType: single
+              buildType: current
+              downloadPath: '$(System.ArtifactStagingDirectory)'
+              artifactName: 'drop'
 
+          - task: AzureRmWebAppDeployment@5
+            inputs:
+             ConnectionType: 'AzureRM'
+             azureSubscription: 'AzureWebApps'
+             appType: 'webAppLinux'
+             WebAppName: 'YoutubeClone2'
+             packageForLinux: '$(System.ArtifactStagingDirectory)/drop'
+             #RuntimeStack: 'NODE|20-lts'
+             #DeploymentTypeLinux: 'oneDeploy'
