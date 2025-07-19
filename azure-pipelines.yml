@@ -43,5 +43,5 @@ stages:
              appType: 'webAppLinux'
              WebAppName: 'YoutubeClone2'
              packageForLinux: '$(System.ArtifactStagingDirectory)/drop'
-             #RuntimeStack: 'NODE|20-lts'
+             RuntimeStack: 'NODE|20-lts'
              #DeploymentTypeLinux: 'oneDeploy'
