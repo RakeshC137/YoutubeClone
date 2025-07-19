@@ -36,7 +36,7 @@ stages:
               downloadPath: '$(System.ArtifactStagingDirectory)'
               artifactName: 'drop'
 
-          - task: AzureRmWebAppDeployment@5
+          - task: AzureRmWebAppDeployment@4
             inputs:
              ConnectionType: 'AzureRM'
              azureSubscription: 'AzureWebApps'
